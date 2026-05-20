@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarthAlly — Smart Waste Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --leaf: #2d6a4f;
+    --leaf-light: #52b788;
+    --leaf-pale: #d8f3dc;
+    --earth: #8B5E3C;
+    --earth-light: #c49a6c;
+    --sky: #e8f4fd;
+    --cream: #faf9f4;
+    --dark: #1a1f1c;
+    --dark2: #2c3330;
+    --muted: #6b7c72;
+    --accent: #f4a261;
+    --accent2: #e76f51;
+    --white: #ffffff;
+    --border: rgba(45,106,79,0.15);
+    --r: 12px;
+    --rl: 20px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Syne', sans-serif;
+    line-height: 1.15;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 3rem;
+    background: rgba(250,249,244,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--leaf);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-icon svg { width: 20px; height: 20px; }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--dark);
+  }
+
+  .logo-text span { color: var(--leaf); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--leaf); }
+
+  .btn-nav {
+    background: var(--leaf);
+    color: white !important;
+    padding: 0.5rem 1.4rem;
+    border-radius: 100px;
+    font-weight: 500 !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+
+  .btn-nav:hover { background: #1e4d38 !important; transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 7rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 40%, #d8f3dc 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, #c7e8d5 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--leaf-pale);
+    opacity: 0.5;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .hero-orb-1 { width: 500px; height: 500px; top: -100px; right: -150px; animation-delay: 0s; }
+  .hero-orb-2 { width: 250px; height: 250px; bottom: 50px; right: 200px; animation-delay: -3s; opacity: 0.3; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-24px); }
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 680px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--leaf-pale);
+    color: var(--leaf);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(45,106,79,0.2);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 1.2rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--leaf);
+    position: relative;
+  }
+
+  .hero h1 em::after {
+    content: '';
+    position: absolute;
+    bottom: 4px; left: 0; right: 0;
+    height: 6px;
+    background: var(--leaf-pale);
+    z-index: -1;
+    border-radius: 4px;
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--leaf);
+    color: white;
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(45,106,79,0.25);
+  }
+
+  .btn-primary:hover { background: #1e4d38; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,106,79,0.35); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: var(--dark);
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-secondary:hover { border-color: var(--leaf); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .stat-item .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--leaf);
+  }
+
+  .stat-item .label {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ─── PHONE MOCKUP ─── */
+  .hero-visual {
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: fadeUp 0.9s 0.15s ease both;
+  }
+
+  .phone-frame {
+    width: 260px;
+    background: var(--dark);
+    border-radius: 40px;
+    padding: 12px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1);
+    position: relative;
+  }
+
+  .phone-screen {
+    background: white;
+    border-radius: 30px;
+    overflow: hidden;
+    height: 520px;
+  }
+
+  .phone-status {
+    background: var(--dark);
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .phone-notch {
+    width: 80px; height: 18px;
+    background: var(--dark);
+    border-radius: 0 0 12px 12px;
+  }
+
+  .app-screen {
+    padding: 16px;
+    background: #f7faf8;
+    height: 100%;
+  }
+
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .app-greeting { font-size: 0.6rem; color: #888; font-family: 'DM Sans', sans-serif; }
+  .app-name { font-size: 0.85rem; font-weight: 700; color: var(--dark); font-family: 'Syne', sans-serif; }
+
+  .app-avatar {
+    width: 30px; height: 30px;
+    background: var(--leaf-pale);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    color: var(--leaf);
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .app-card {
+    background: var(--leaf);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+    color: white;
+  }
+
+  .app-card-title { font-size: 0.6rem; opacity: 0.7; font-family: 'DM Sans', sans-serif; margin-bottom: 4px; }
+  .app-card-val { font-size: 1.2rem; font-weight: 700; font-family: 'Syne', sans-serif; }
+  .app-card-sub { font-size: 0.55rem; opacity: 0.7; margin-top: 2px; }
+
+  .app-points-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 6px 8px;
+    margin-top: 8px;
+    font-size: 0.58rem;
+  }
+
+  .points-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+
+  .app-section-title { font-size: 0.65rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; font-family: 'Syne', sans-serif; }
+
+  .waste-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .waste-chip {
+    background: white;
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .waste-icon {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+  }
+
+  .waste-label { font-size: 0.55rem; font-weight: 600; color: var(--dark); font-family: 'Syne', sans-serif; }
+  .waste-sub { font-size: 0.48rem; color: #888; }
+
+  .alert-card {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border-left: 3px solid var(--leaf);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .alert-icon { font-size: 1rem; }
+  .alert-text { font-size: 0.55rem; color: var(--dark); font-family: 'DM Sans', sans-serif; }
+  .alert-time { font-size: 0.48rem; color: #aaa; margin-top: 2px; }
+
+  .floating-card {
+    position: absolute;
+    background: white;
+    border-radius: 14px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .fc-left {
+    left: -80px;
+    top: 100px;
+    animation-delay: -2s;
+    min-width: 140px;
+  }
+
+  .fc-right {
+    right: -90px;
+    bottom: 140px;
+    animation-delay: -4s;
+    min-width: 130px;
+  }
+
+  .fc-label { font-size: 0.68rem; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+  .fc-val { font-size: 1.1rem; font-weight: 700; color: var(--leaf); font-family: 'Syne', sans-serif; }
+  .fc-badge { font-size: 0.6rem; background: var(--leaf-pale); color: var(--leaf); padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 6rem 3rem; }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--leaf);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    max-width: 600px;
+  }
+
+  .section-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 540px;
+    font-weight: 300;
+  }
+
+  /* ─── FEATURES ─── */
+  .features { background: white; }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .feature-card {
+    background: var(--cream);
+    border-radius: var(--rl);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--leaf);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+  .feature-card:hover::before { transform: scaleX(1); }
+
+  .feature-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--dark);
+  }
+
+  .feature-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  .how {
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .how::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, var(--leaf-pale) 0%, transparent 70%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 32px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--leaf) 0, var(--leaf) 8px, transparent 8px, transparent 16px);
+    opacity: 0.3;
+  }
+
+  .step {
+    text-align: center;
+    position: relative;
+  }
+
+  .step-num {
+    width: 64px; height: 64px;
+    background: white;
+    border: 2px solid var(--leaf);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--leaf);
+    margin: 0 auto 1.2rem;
+    position: relative;
+    z-index: 1;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .step:hover .step-num { background: var(--leaf); color: white; }
+
+  .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .step p { font-size: 0.88rem; color: var(--muted); font-weight: 300; }
+
+  /* ─── WASTE GUIDE ─── */
+  .waste { background: var(--dark); color: white; }
+  .waste .section-label { color: var(--leaf-light); }
+  .waste .section-title { color: white; }
+  .waste .section-sub { color: rgba(255,255,255,0.55); }
+
+  .waste-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .waste-card {
+    border-radius: var(--rl);
+    padding: 1.8rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .waste-card:hover { transform: scale(1.03); }
+
+  .waste-card-emoji {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .waste-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+
+  .waste-card p { font-size: 0.82rem; opacity: 0.75; font-weight: 300; line-height: 1.5; }
+
+  .waste-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .wc-blue { background: #1a3a5c; }
+  .wc-blue .waste-tag { background: #2c6fad; color: white; }
+
+  .wc-green { background: #1a3a27; }
+  .wc-green .waste-tag { background: var(--leaf); color: white; }
+
+  .wc-orange { background: #3d2410; }
+  .wc-orange .waste-tag { background: var(--accent2); color: white; }
+
+  .wc-purple { background: #2a1a3d; }
+  .wc-purple .waste-tag { background: #7c3aed; color: white; }
+
+  /* ─── REWARDS ─── */
+  .rewards { background: white; }
+
+  .rewards-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    margin-top: 4rem;
+  }
+
+  .rewards-visual {
+    background: var(--cream);
+    border-radius: var(--rl);
+    padding: 2.5rem;
+    border: 1px solid var(--border);
+  }
+
+  .points-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .points-label { font-size: 0.85rem; color: var(--dark); min-width: 100px; font-weight: 500; }
+
+  .points-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--leaf-pale);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .points-fill {
+    height: 100%;
+    background: var(--leaf);
+    border-radius: 100px;
+    transition: width 0.8s ease;
+  }
+
+  .points-score { font-size: 0.85rem; color: var(--leaf); font-weight: 700; min-width: 36px; text-align: right; }
+
+  .badges-row {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.8rem 0.7rem;
+    min-width: 70px;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .badge:hover { border-color: var(--leaf); transform: translateY(-2px); }
+  .badge-icon { font-size: 1.6rem; }
+  .badge-name { font-size: 0.65rem; color: var(--muted); font-weight: 600; text-align: center; }
+
+  .rewards-text .reward-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1.8rem;
+  }
+
+  .reward-dot {
+    width: 10px; height: 10px;
+    background: var(--leaf);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .reward-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .reward-item p { font-size: 0.88rem; color: var(--muted); font-weight: 300; }
+
+  /* ─── COMMUNITY ─── */
+  .community {
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .community::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--leaf-pale) 0%, transparent 70%);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .community-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .community-card {
+    background: white;
+    border-radius: var(--rl);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.25s;
+  }
+
+  .community-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+
+  .community-card .icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .community-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .community-card p { font-size: 0.88rem; color: var(--muted); font-weight: 300; }
+
+  /* ─── FUTURE ─── */
+  .future { background: white; }
+
+  .future-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .future-item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    background: var(--cream);
+    border-radius: var(--r);
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+
+  .future-item:hover { border-color: var(--leaf); }
+
+  .future-icon {
+    width: 44px; height: 44px;
+    background: var(--leaf-pale);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .future-item h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem; }
+  .future-item p { font-size: 0.85rem; color: var(--muted); font-weight: 300; }
+
+  .coming-soon {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: var(--leaf-pale);
+    color: var(--leaf);
+    padding: 2px 8px;
+    border-radius: 100px;
+    display: inline-block;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── CTA ─── */
+  .cta {
+    background: var(--leaf);
+    text-align: center;
+    color: white;
+  }
+
+  .cta .section-label { color: rgba(255,255,255,0.6); }
+  .cta .section-title { color: white; max-width: 100%; }
+  .cta .section-sub { color: rgba(255,255,255,0.7); max-width: 480px; margin: 0 auto 2.5rem; }
+
+  .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .btn-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: var(--leaf);
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+  .btn-outline-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: white;
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.5);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-outline-white:hover { border-color: white; transform: translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark2);
+    color: rgba(255,255,255,0.55);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: white;
+  }
+
+  .footer-logo span { color: var(--leaf-light); }
+
+  .footer-links { display: flex; gap: 2rem; list-style: none; flex-wrap: wrap; justify-content: center; }
+  .footer-links a { text-decoration: none; color: rgba(255,255,255,0.4); font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--leaf-light); }
+
+  .footer-copy { font-size: 0.82rem; color: rgba(255,255,255,0.25); }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a10 10 0 1 1-9.95 9m9.95-9v9l-4 4"/>
+        <path d="M7 8c0 3 2 5 5 6"/>
+      </svg>
+    </div>
+    <span class="logo-text">Earth<span>Ally</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#waste">Waste Guide</a></li>
+    <li><a href="#rewards">Rewards</a></li>
+    <li><a href="#" class="btn-nav">Download App</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      🌿 Smart Waste Management
+    </div>
+    <h1>Make Your City<br><em>Cleaner & Greener</em></h1>
+    <p>EarthAlly helps communities segregate waste, track pickups, report dumping, and build eco-habits — one small action at a time.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        <span>📱</span> Get the App
+      </a>
+      <a href="#features" class="btn-secondary">
+        <span>▶</span> See Features
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="num">50K+</div>
+        <div class="label">Active Users</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">200+</div>
+        <div class="label">Cities Covered</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">1.2M</div>
+        <div class="label">Reports Filed</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="phone-frame">
+      <div class="phone-status">
+        <div class="phone-notch"></div>
+      </div>
+      <div class="phone-screen">
+        <div class="app-screen">
+          <div class="app-header">
+            <div>
+              <div class="app-greeting">Good morning 🌱</div>
+              <div class="app-name">EarthAlly</div>
+            </div>
+            <div class="app-avatar">EA</div>
+          </div>
+
+          <div class="app-card">
+            <div class="app-card-title">Your Eco Score</div>
+            <div class="app-card-val">1,840 pts</div>
+            <div class="app-card-sub">🏆 Top 5% in Pune this week</div>
+            <div class="app-points-row">
+              <div class="points-dot"></div>
+              <span>Pickup scheduled — Today 8 AM</span>
+            </div>
+          </div>
+
+          <div class="app-section-title">Waste Categories</div>
+          <div class="waste-grid">
+            <div class="waste-chip">
+              <div class="waste-icon" style="background:#e8f4e8;">♻️</div>
+              <div>
+                <div class="waste-label">Dry Waste</div>
+                <div class="waste-sub">Paper, Plastic</div>
+              </div>
+            </div>
+            <div class="waste-chip">
+              <div class="waste-icon" style="background:#e8f4e0;">🌿</div>
+              <div>
+                <div class="waste-label">Wet Waste</div>
+                <div class="waste-sub">Food, Organic</div>
+              </div>
+            </div>
+            <div class="waste-chip">
+              <div class="waste-icon" style="background:#e8eef8;">💡</div>
+              <div>
+                <div class="waste-label">E-Waste</div>
+                <div class="waste-sub">Electronics</div>
+              </div>
+            </div>
+            <div class="waste-chip">
+              <div class="waste-icon" style="background:#f8ece8;">☢️</div>
+              <div>
+                <div class="waste-label">Hazardous</div>
+                <div class="waste-sub">Chemicals</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-section-title">Latest Alert</div>
+          <div class="alert-card">
+            <div class="alert-icon">🚛</div>
+            <div>
+              <div class="alert-text">Garbage truck en route to Sector 4</div>
+              <div class="alert-time">Estimated: 25 minutes away</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="floating-card fc-left">
+      <div class="fc-label">🌍 CO₂ Saved</div>
+      <div class="fc-val">42 kg</div>
+      <div class="fc-badge">This Month</div>
+    </div>
+    <div class="floating-card fc-right">
+      <div class="fc-label">🏅 Rank</div>
+      <div class="fc-val">#8</div>
+      <div class="fc-badge">City Leader</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label reveal">Features</div>
+  <h2 class="section-title reveal">Everything you need to go green</h2>
+  <p class="section-sub reveal">A complete ecosystem for smarter, cleaner communities powered by technology and civic participation.</p>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:#d8f3dc;">♻️</div>
+      <h3>Waste Segregation Guide</h3>
+      <p>Interactive guides to help you separate dry, wet, plastic, and e-waste correctly. Never be confused about which bin to use again.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:#e8f4fd;">🚛</div>
+      <h3>Smart Pickup Alerts</h3>
+      <p>Real-time notifications for garbage collection schedules. Know exactly when the truck is arriving in your neighbourhood.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:#fff3e0;">📸</div>
+      <h3>Report Dumping Areas</h3>
+      <p>Snap a photo of illegal dumping and submit a report in seconds. Track the cleanup status and hold authorities accountable.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:#fce4ec;">🏆</div>
+      <h3>Rewards & Badges</h3>
+      <p>Earn points for responsible recycling and cleanliness actions. Unlock badges, climb leaderboards, and win community rewards.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:#ede7f6;">📚</div>
+      <h3>Eco Education Hub</h3>
+      <p>Daily tips on recycling, sustainability, and protecting the environment — tailored for families, students, and communities.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon" style="background:#e8f5e9;">🤝</div>
+      <h3>Community Participation</h3>
+      <p>Residents, schools, and local authorities collaborate on clean-up drives and eco campaigns — all in one place.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-label reveal">How it works</div>
+  <h2 class="section-title reveal">From download to change — in four steps</h2>
+
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h3>Download & Register</h3>
+      <p>Sign up with your location to get personalised waste schedules and local alerts.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">2</div>
+      <h3>Segregate Waste</h3>
+      <p>Use our guide to correctly sort your waste into the right categories every day.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">3</div>
+      <h3>Report & Track</h3>
+      <p>Photograph dumping spots, file reports, and monitor cleanup progress in real time.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">4</div>
+      <h3>Earn Rewards</h3>
+      <p>Collect points, unlock eco-badges, and rise up the community leaderboard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WASTE GUIDE -->
+<section class="waste" id="waste">
+  <div class="section-label reveal">Waste Guide</div>
+  <h2 class="section-title reveal">Know your waste, save our planet</h2>
+  <p class="section-sub reveal">Proper segregation is the first step to a cleaner city. EarthAlly makes it simple.</p>
+
+  <div class="waste-cards">
+    <div class="waste-card wc-blue reveal">
+      <span class="waste-card-emoji">📄</span>
+      <h3>Dry Waste</h3>
+      <p>Paper, cardboard, metals, glass, and non-wet plastics. Clean and separate before disposal.</p>
+      <span class="waste-tag">Blue Bin</span>
+    </div>
+    <div class="waste-card wc-green reveal">
+      <span class="waste-card-emoji">🥬</span>
+      <h3>Wet Waste</h3>
+      <p>Food scraps, vegetable peels, garden waste, and other organic biodegradable material.</p>
+      <span class="waste-tag">Green Bin</span>
+    </div>
+    <div class="waste-card wc-orange reveal">
+      <span class="waste-card-emoji">🧴</span>
+      <h3>Plastic Waste</h3>
+      <p>Bottles, bags, containers, wrappers. Rinse before recycling to avoid contamination.</p>
+      <span class="waste-tag">Orange Bin</span>
+    </div>
+    <div class="waste-card wc-purple reveal">
+      <span class="waste-card-emoji">💻</span>
+      <h3>E-Waste</h3>
+      <p>Old phones, cables, batteries, bulbs. Never mix with regular bins — drop at certified centres.</p>
+      <span class="waste-tag">E-Waste Hub</span>
+    </div>
+  </div>
+</section>
+
+<!-- REWARDS -->
+<section class="rewards" id="rewards">
+  <div class="section-label reveal">Rewards System</div>
+  <h2 class="section-title reveal">Good habits deserve recognition</h2>
+
+  <div class="rewards-layout">
+    <div class="rewards-visual reveal">
+      <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:1.5rem; color:var(--dark);">Your Progress This Month</div>
+
+      <div class="points-bar-row">
+        <div class="points-label">Segregation</div>
+        <div class="points-bar"><div class="points-fill" style="width:88%"></div></div>
+        <div class="points-score">880</div>
+      </div>
+      <div class="points-bar-row">
+        <div class="points-label">Reporting</div>
+        <div class="points-bar"><div class="points-fill" style="width:62%"></div></div>
+        <div class="points-score">620</div>
+      </div>
+      <div class="points-bar-row">
+        <div class="points-label">Education</div>
+        <div class="points-bar"><div class="points-fill" style="width:74%"></div></div>
+        <div class="points-score">740</div>
+      </div>
+      <div class="points-bar-row">
+        <div class="points-label">Community</div>
+        <div class="points-bar"><div class="points-fill" style="width:45%"></div></div>
+        <div class="points-score">450</div>
+      </div>
+
+      <div class="badges-row">
+        <div class="badge"><div class="badge-icon">🌱</div><div class="badge-name">Eco Starter</div></div>
+        <div class="badge"><div class="badge-icon">♻️</div><div class="badge-name">Recycler</div></div>
+        <div class="badge"><div class="badge-icon">📸</div><div class="badge-name">Reporter</div></div>
+        <div class="badge"><div class="badge-icon">🏆</div><div class="badge-name">Champion</div></div>
+      </div>
+    </div>
+
+    <div class="rewards-text reveal">
+      <div class="reward-item">
+        <div class="reward-dot"></div>
+        <div>
+          <h4>Points for every action</h4>
+          <p>Earn points when you segregate waste, report dumping areas, attend clean-up drives, or complete eco-education modules.</p>
+        </div>
+      </div>
+      <div class="reward-item">
+        <div class="reward-dot"></div>
+        <div>
+          <h4>Unlock achievement badges</h4>
+          <p>From "Eco Starter" to "City Champion" — collect badges that showcase your environmental commitment to your community.</p>
+        </div>
+      </div>
+      <div class="reward-item">
+        <div class="reward-dot"></div>
+        <div>
+          <h4>Community leaderboards</h4>
+          <p>Compete with neighbours, schools, and entire localities to see who makes the biggest positive impact on their environment.</p>
+        </div>
+      </div>
+      <div class="reward-item">
+        <div class="reward-dot"></div>
+        <div>
+          <h4>Real-world redemptions</h4>
+          <p>Redeem points for eco-friendly products, discounts at local businesses, or contribute to planting trees in your city.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="community">
+  <div class="section-label reveal">Community</div>
+  <h2 class="section-title reveal">Stronger together, cleaner together</h2>
+  <p class="section-sub reveal">EarthAlly connects residents, schools, and local governments to build a sustainable city ecosystem.</p>
+
+  <div class="community-grid">
+    <div class="community-card reveal">
+      <span class="icon">🏘️</span>
+      <h3>Residents & Households</h3>
+      <p>Individual families track their waste habits, file reports, and earn rewards for maintaining clean surroundings.</p>
+    </div>
+    <div class="community-card reveal">
+      <span class="icon">🏫</span>
+      <h3>Schools & Youth</h3>
+      <p>Eco-education modules designed for students. Schools compete in cleanliness challenges and earn community recognition.</p>
+    </div>
+    <div class="community-card reveal">
+      <span class="icon">🏛️</span>
+      <h3>Local Authorities</h3>
+      <p>Municipalities track complaints, optimise pickup routes, and engage citizens — all through a single dashboard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE -->
+<section class="future">
+  <div class="section-label reveal">What's next</div>
+  <h2 class="section-title reveal">The future of EarthAlly</h2>
+  <p class="section-sub reveal">We're building tomorrow's features today — smarter, more connected, more impactful.</p>
+
+  <div class="future-list">
+    <div class="future-item reveal">
+      <div class="future-icon">🤖</div>
+      <div>
+        <h4>AI Waste Detection</h4>
+        <p>Point your camera at any item and our AI instantly identifies its waste category and correct disposal method.</p>
+        <span class="coming-soon">Coming Soon</span>
+      </div>
+    </div>
+    <div class="future-item reveal">
+      <div class="future-icon">🌫️</div>
+      <div>
+        <h4>Carbon Footprint Tracker</h4>
+        <p>Track your personal carbon footprint based on your waste habits and eco-actions, with monthly trend reports.</p>
+        <span class="coming-soon">Coming Soon</span>
+      </div>
+    </div>
+    <div class="future-item reveal">
+      <div class="future-icon">🛒</div>
+      <div>
+        <h4>Recycling Marketplace</h4>
+        <p>Buy and sell recyclable materials directly — connecting households with recyclers and upcyclers near you.</p>
+        <span class="coming-soon">Coming Soon</span>
+      </div>
+    </div>
+    <div class="future-item reveal">
+      <div class="future-icon">🏙️</div>
+      <div>
+        <h4>Smart City Integration</h4>
+        <p>Seamless integration with smart city infrastructure — IoT-enabled bins, automated reporting, and real-time data dashboards.</p>
+        <span class="coming-soon">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="section-label reveal">Join the movement</div>
+  <h2 class="section-title reveal">Start making a difference today</h2>
+  <p class="section-sub reveal">Download EarthAlly and become part of a growing community committed to a cleaner, greener India.</p>
+  <div class="cta-actions reveal">
+    <a href="#" class="btn-white">📱 Download for iOS</a>
+    <a href="#" class="btn-white">🤖 Download for Android</a>
+    <a href="#" class="btn-outline-white">Learn More</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Earth<span>Ally</span></div>
+  <ul class="footer-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#waste">Waste Guide</a></li>
+    <li><a href="#rewards">Rewards</a></li>
+    <li><a href="#">Contact</a></li>
+    <li><a href="#">Privacy Policy</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 EarthAlly. All rights reserved. Made with 🌱 for a cleaner planet.</div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
